@@ -1,13 +1,12 @@
 <html>
 	<body>
-		{% if not username %}
+		<div>You are {{username}} with credentials {{password}}</div>
+		{% if not loggedIn %}
 		<form method="POST" action="/login">
 			<input type="text" name="username" placeholder="username" />
 			<input type="password" name="password" placeholder="password" />
 			<button type="submit">Submit</button>
 		</form>
-		{% else %}
-		<div>You are {{username}} with credentials {{password}}</div>
 		{% endif %}
 	</body>
 </html>
