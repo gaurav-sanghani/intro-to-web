@@ -12,7 +12,7 @@ def home():
 	if user:
 		return flask.render_template('index.html',
 			username=user.username,
-			password=user.password,
+			#password=user.password,
 		)
 	else:
 		return flask.render_template('guest.html')
@@ -56,15 +56,9 @@ def login():
 @auth.require_auth
 def logout():
 	resp = flask.redirect(flask.url_for('home'))
-	resp.set_cookie(
-		'username', '',
-		expires='Thu, 01 Jan 1970 00:00:00 GMT'
-	)
-	resp.set_cookie(
-		'password', '',
-		expires='Thu, 01 Jan 1970 00:00:00 GMT'
-	)
+	auth.logout(resp)
 	return resp
 
 if __name__ == '__main__':
+	app.secret_key = 'abcd'
 	app.run(debug=True)

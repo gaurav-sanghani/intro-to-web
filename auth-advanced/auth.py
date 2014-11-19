@@ -16,20 +16,21 @@ class UserLoginError(Error):
 	pass
 
 
-User = collections.namedtuple('User', ['username', 'password'])
+User = collections.namedtuple('User', ['username'])#, 'password'])
 
 def current_user():
-	cookie = flask.request.cookies
-	username = cookie.get('username')
-	password = cookie.get('password')
-	if username and password:
-		return User(username, password)
+	#cookie = flask.request.cookies
+	#password = cookie.get('password')
+	username = flask.session.get('username') #cookie.get('username')
+	if username: # and password:
+		return User(username)#, password)
 
 	return None
 
 def set_current_user(user_data, response):
-	response.set_cookie('username', user_data['username'])
-	response.set_cookie('password', user_data['password'])
+	#response.set_cookie('username', user_data['username'])
+	#response.set_cookie('password', user_data['password'])
+	flask.session['username'] = user_data['username']
 
 def require_auth(fn):
 	@functools.wraps(fn)
@@ -89,3 +90,20 @@ def login_user(response=None):
 		return response
 	except (data.BadPassword, data.MissingUser) as e:
 		raise UserLoginError('Incorrect username/password')
+
+def logout(response=None):
+	if not response:
+		response = flask.make_response()
+
+	del flask.session['username']	
+
+	#response.set_cookie(
+	#	'username', '',
+	#	expires='Thu, 01 Jan 1970 00:00:00 GMT'
+	#)
+	#response.set_cookie(
+	#	'password', '',
+	#	expires='Thu, 01 Jan 1970 00:00:00 GMT'
+	#)
+
+	return response
