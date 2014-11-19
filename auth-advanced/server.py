@@ -9,10 +9,13 @@ app = flask.Flask(__name__)
 @auth.require_auth
 def home():
 	user = auth.current_user()
-	return flask.render_template('index.html',
-		username=user.username,
-		password=user.password,
-	)
+	if user:
+		return flask.render_template('index.html',
+			username=user.username,
+			password=user.password,
+		)
+	else:
+		return flask.render_template('guest.html')
 
 
 @app.route('/signup', methods=['GET', 'POST'])
@@ -40,7 +43,7 @@ def login():
 			resp = flask.redirect(flask.url_for('home'))
 			auth.login_user(resp)
 			return resp
-		except UserLoginError as e:
+		except auth.UserLoginError as e:
 			error_message = e.message
 
 	return flask.render_template(
@@ -52,7 +55,7 @@ def login():
 @app.route('/logout', methods=['GET'])
 @auth.require_auth
 def logout():
-	resp = flask.redirect(flask.url_for('hello'))
+	resp = flask.redirect(flask.url_for('home'))
 	resp.set_cookie(
 		'username', '',
 		expires='Thu, 01 Jan 1970 00:00:00 GMT'

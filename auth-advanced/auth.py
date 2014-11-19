@@ -71,7 +71,7 @@ def create_user(response=None):
 
 		return response
 	except Error as e:
-		raise UserCreationError(e.message)
+		raise UserCreationError('Unable to create user')
 
 
 def login_user(response=None):
@@ -87,5 +87,5 @@ def login_user(response=None):
 		set_current_user(form_data, response)
 
 		return response
-	except Error as e:
-		raise UserLoginError(e.message)
+	except (data.BadPassword, data.MissingUser) as e:
+		raise UserLoginError('Incorrect username/password')
