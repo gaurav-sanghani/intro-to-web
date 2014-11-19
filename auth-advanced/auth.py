@@ -70,7 +70,7 @@ def create_user(response=None):
 		set_current_user(form_data, response)
 
 		return response
-	except Error as e:
+	except Exception as e:
 		raise UserCreationError('Unable to create user')
 
 
