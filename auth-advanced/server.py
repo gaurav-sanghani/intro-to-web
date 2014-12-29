@@ -9,13 +9,10 @@ app = flask.Flask(__name__)
 @auth.require_auth
 def home():
 	user = auth.current_user()
-	if user:
-		return flask.render_template('index.html',
-			username=user.username,
-			#password=user.password,
-		)
-	else:
-		return flask.render_template('guest.html')
+	return flask.render_template('index.html',
+		username=user.username,
+		#password=user.password,
+	)
 
 
 @app.route('/signup', methods=['GET', 'POST'])
