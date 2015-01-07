@@ -1,0 +1,16 @@
+<html>
+	<body>
+		{% if message %}
+		<div>{{message}}</div>
+		{% endif %}
+
+		<h3>Login to Demo App</h3>
+		<form method="POST" action="{{ url_for('login') }}">
+			<input type="text" name="username" placeholder="username" />
+			<input type="password" name="password" placeholder="password" />
+			<button type="submit">Submit</button>
+		</form>
+
+		<a href="{{ url_for('signup') }}"><small>Create an account</small></a>
+	</body>
+</html>

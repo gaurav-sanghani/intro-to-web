@@ -1,0 +1,45 @@
+<html>
+	<head>
+		<link rel="stylesheet" href="/static/css/todo.css" type="text/css"/>
+	</head>
+	<body>
+		<h2>Welcome {{username}}! You have {{ items | length }} things ToDo.</h2>
+
+		<div id='todo-wrapper'>
+			<ul id='todo-list'>
+			{% for item in items %}
+				<li>
+					<span>
+						<span>{{ item['data'] }}</span>
+						<span>Created time: {{ item['created_ts'].strftime('%H:%M %d-%m-%Y') }}</span>
+					</span>
+					<span class='hidden'>
+						<form method='POST' action='/items?method=patch'>
+							<input name='id' type='hidden' value={{ item['id'] }} />
+							<textarea name="data">{{ item['data'] }}</textarea>
+							<button type='submit'>Submit</button>
+						</form>
+					</span>
+					<span>
+						<form method='POST' action='/items?method=delete'>
+							<input name='id' type='hidden' value={{ item['id'] }} />
+							<button type='submit'>Delete</button>
+						</form>
+					</span>
+				</li>
+			{% endfor %}
+			</ul>
+
+			{% if items|length == 0 %}
+			<div>What do you need to do?</div>
+			{% endif %}
+
+			<form method='POST' action='/items'>
+				<textarea name="data"></textarea>
+				<button type="submit">Submit</button>
+			</form>
+		</div>
+
+		<a href="{{ url_for('logout') }}">Logout</a>
+	</body>
+</html>
