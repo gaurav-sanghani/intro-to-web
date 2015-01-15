@@ -13,18 +13,25 @@
 						<span>{{ item['data'] }}</span>
 						<span>Created time: {{ item['created_ts'].strftime('%H:%M %d-%m-%Y') }}</span>
 					</span>
-					<span class='hidden'>
+					{% if request.query_string == "editAction={}".format(item['id']) %}
+					<span>
 						<form method='POST' action='/items?method=patch'>
-							<input name='id' type='hidden' value={{ item['id'] }} />
+							<input name='id' type='hidden' value="{{ item['id'] }}" />
 							<textarea name="data">{{ item['data'] }}</textarea>
 							<button type='submit'>Submit</button>
 						</form>
 					</span>
+					{% endif %}
 					<span>
 						<form method='POST' action='/items?method=delete'>
-							<input name='id' type='hidden' value={{ item['id'] }} />
+							<input name='id' type='hidden' value="{{ item['id'] }}" />
 							<button type='submit'>Delete</button>
 						</form>
+					</span>
+					<span>
+						<a href="?editAction={{ item['id'] }}">
+							<button>Edit</button>
+						</a>
 					</span>
 				</li>
 			{% endfor %}
